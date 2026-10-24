@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>чек 7</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchQuery = location.search;
+            if (!searchQuery) return;
+
+            const queryParams = searchQuery.substring(1).split('&');
+            let dataA = [];
+            let dataB = [];
+
+            for (let i = 0; i < queryParams.length; i++) {
+                const [paramName, paramValue] = queryParams[i].split('=');
+                if (paramName === 'A') dataA = paramValue.split(',').map(Number);
+                if (paramName === 'B') dataB = paramValue.split(',').map(Number);
+            }
+
+            if (dataA.length === 0 || dataB.length === 0 || dataA.length !== dataB.length) {
+                return;
+            }
+
+            const N = dataA.length;
+            let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
+
+            for (let i = 0; i < N; i++) {
+                sumX += dataA[i];
+                sumY += dataB[i];
+                sumXY += dataA[i] * dataB[i];
+                sumX2 += dataA[i] ** 2;
+                sumY2 += dataB[i] ** 2;
+            }
+
+            const rNumerator = (N * sumXY) - (sumX * sumY);
+            const rDenominator = Math.sqrt(((N * sumX2) - (sumX ** 2)) * ((N * sumY2) - (sumY ** 2)));
+            let result = Math.abs(rNumerator / rDenominator); 
+            let finalTitle = "";
+            
+            if (result === 1) {
+                finalTitle = "1";
+            } else {
+                const truncated = Math.floor(result * 1000) / 1000;
+                finalTitle = truncated.toString();
+
+                if (!finalTitle.includes('.')) {
+                    finalTitle += '.000';
+                } else {
+                    const parts = finalTitle.split('.');
+                    while (parts[1].length < 3) {
+                        parts[1] += '0';
+                    }
+                    finalTitle = parts[0] + '.' + parts[1];
+                }
+            }
+
+            document.title = finalTitle;
+        });
+    </script>
+</head>
+<body>
+    <h4>1167675</h4>
+</body>
+</html>
